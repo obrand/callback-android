@@ -199,6 +199,13 @@ public class DroidGap extends PhonegapActivity {
     // (this is not the color for the webview, which is set in HTML)
     private int backgroundColor = Color.BLACK;
     
+    /** The login used for basic auth requests */
+    private String login = null;
+    
+    /** The password used for basic auth requests */
+    private String password = null;
+    
+    
     /*
      * The variables below are used to cache some of the activity properties.
      */
@@ -215,6 +222,44 @@ public class DroidGap extends PhonegapActivity {
     // when another application (activity) is started.
     protected boolean keepRunning = true;
 
+    /**
+     * Gets the login used for basic auth requests
+     * 
+     * @return the login
+     */
+    public String getLogin() {
+        return login;
+    }
+
+    /**
+     * Sets the login used for basic auth requests
+     * 
+     * @param login
+     *            the new login
+     */
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    /**
+     * Gets the password used for basic auth requests
+     * 
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets the password used for basic auth requests
+     * 
+     * @param password
+     *            the new password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     /** 
      * Called when the activity is first created. 
      * 
@@ -1342,6 +1387,27 @@ public class DroidGap extends PhonegapActivity {
                 }
             }
             return true;
+        }
+        
+        /**
+         * On received http auth request.
+         * 
+         * @param view
+         *            the view
+         * @param handler
+         *            the handler
+         * @param host
+         *            the host
+         * @param realm
+         *            the realm
+         */
+        @Override
+        public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host,
+                String realm) {
+           
+            if(login != null && password != null) {
+                handler.proceed(login, password);
+            }
         }
         
         @Override
